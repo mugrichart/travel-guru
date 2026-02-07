@@ -1,0 +1,17 @@
+{
+  "name": "travel-guru",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:client": "pnpm --filter client dev",
+    "dev:server": "pnpm --filter server start:dev",
+    "dev": "pnpm run /^dev:/",
+    "build": "pnpm --filter client build && pnpm --filter server build",
+    "lint": "pnpm --filter client lint && pnpm --filter server lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.26.2"
+}
