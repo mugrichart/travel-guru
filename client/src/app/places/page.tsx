@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import PlaceAutocomplete from '@/components/PlaceAutocomplete';
 import { MapPin, Navigation, Sparkles } from 'lucide-react';
 
@@ -10,6 +11,7 @@ interface Place {
 }
 
 export default function PlacesPage() {
+    const router = useRouter();
     const [origin, setOrigin] = useState<Place | null>(null);
     const [destination, setDestination] = useState<Place | null>(null);
     const [isSearching, setIsSearching] = useState(false);
@@ -20,11 +22,16 @@ export default function PlacesPage() {
         }
 
         setIsSearching(true);
-        // TODO: Implement route search logic
-        setTimeout(() => {
-            setIsSearching(false);
-            console.log('Searching route from', origin?.description, 'to', destination?.description);
-        }, 2000);
+
+        // Navigate to navigation page with place IDs
+        const params = new URLSearchParams({
+            originId: origin.placeId,
+            destinationId: destination.placeId,
+            originDesc: origin.description,
+            destinationDesc: destination.description
+        });
+
+        router.push(`/navigation?${params.toString()}`);
     };
 
     const handleSwap = () => {
@@ -120,11 +127,11 @@ export default function PlacesPage() {
                             {isSearching ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                    <span>Searching...</span>
+                                    <span>Starting...</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>Find Routes</span>
+                                    <span>Start Journey</span>
                                     <svg
                                         className="w-5 h-5 transition-transform group-hover:translate-x-1"
                                         fill="none"
