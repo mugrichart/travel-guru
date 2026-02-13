@@ -4,12 +4,13 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
     Map,
-    AdvancedMarker,
     useMap,
     useMapsLibrary,
-    Pin
 } from '@vis.gl/react-google-maps';
-import { Car, MapPin, Loader2, Navigation } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { VehicleMarker } from '@/components/VehicleMarker';
+import { DestinationMarker } from '@/components/DestinationMarker';
+import { LoadingOverlay } from '@/components/LoadingOverlay';
 
 interface Location {
     lat: number;
@@ -24,6 +25,7 @@ function NavigationContent() {
     const [origin, setOrigin] = useState<Location | null>(null);
     const [destination, setDestination] = useState<Location | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [heading, setHeading] = useState(0);
 
     const originId = searchParams.get('originId');
     const destinationId = searchParams.get('destinationId');
@@ -60,7 +62,13 @@ function NavigationContent() {
             const bounds = new google.maps.LatLngBounds();
             bounds.extend(originCoords);
             bounds.extend(destCoords);
+
+            // Note: fitBounds resets heading/tilt to 0
             map.fitBounds(bounds, 100);
+
+            // Re-apply rotation after fitting bounds
+            const randomHeading = Math.floor(Math.random() * 360);
+            setHeading(randomHeading);
         }).catch(err => {
             console.error('Error fetching place coordinates:', err);
             setIsLoading(false);
@@ -69,48 +77,21 @@ function NavigationContent() {
 
     return (
         <div className="relative w-full h-screen bg-slate-950 overflow-hidden">
-            {/* Loading Overlay */}
-            {isLoading && (
-                <div className="absolute inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center gap-4 transition-opacity duration-500">
-                    <Loader2 className="w-12 h-12 text-gold-500 animate-spin" />
-                    <p className="text-slate-400 text-lg animate-pulse font-medium tracking-wide text-center px-4">
-                        Initializing premium navigation system...
-                    </p>
-                </div>
-            )}
+            {isLoading && <LoadingOverlay message="Initializing premium navigation system..." />}
 
             <Map
                 defaultCenter={{ lat: 0, lng: 0 }}
                 defaultZoom={3}
-                mapId={process.env.NEXT_PUBLIC_MAP_ID || "bf19c36284f108f9"}
+                mapId={process.env.NEXT_PUBLIC_MAP_ID || "32991419fc15604ca1f17398"}
                 className="w-full h-full"
                 disableDefaultUI={true}
                 gestureHandling={'greedy'}
+                heading={heading}
+                tilt={75}
             >
-                {origin && (
-                    <AdvancedMarker position={origin}>
-                        <div className="relative group">
-                            {/* Glow effect */}
-                            <div className="absolute inset-0 bg-gold-500/50 rounded-full blur-xl scale-150 animate-pulse"></div>
-                            <div className="relative bg-slate-900 border-2 border-gold-500 p-2 rounded-full shadow-2xl transform transition-transform group-hover:scale-110">
-                                <Car className="w-6 h-6 text-gold-500" />
-                            </div>
-                        </div>
-                    </AdvancedMarker>
-                )}
-
-                {destination && (
-                    <AdvancedMarker position={destination}>
-                        <div className="relative group">
-                            <div className="absolute inset-0 bg-red-500/30 rounded-full blur-xl scale-150 group-hover:animate-pulse"></div>
-                            <div className="relative bg-slate-900 border-2 border-red-500 p-2 rounded-full shadow-2xl transform transition-transform group-hover:scale-110">
-                                <MapPin className="w-6 h-6 text-red-500" />
-                            </div>
-                        </div>
-                    </AdvancedMarker>
-                )}
+                {origin && <VehicleMarker position={origin} />}
+                {destination && <DestinationMarker position={destination} />}
             </Map>
-
         </div>
     );
 }
