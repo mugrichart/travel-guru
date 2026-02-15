@@ -7,7 +7,7 @@ import {
     useMap,
     useMapsLibrary,
 } from '@vis.gl/react-google-maps';
-import { Loader2, Play, RotateCcw, Navigation } from 'lucide-react';
+import { Loader2, Play, RotateCcw, Navigation, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { VehicleMarker } from '@/components/VehicleMarker';
 import { DestinationMarker } from '@/components/DestinationMarker';
 import { LoadingOverlay } from '@/components/LoadingOverlay';
@@ -255,6 +255,40 @@ function NavigationContent() {
                             className="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-all active:rotate-180 border border-slate-700"
                         >
                             <RotateCcw className="w-5 h-5" />
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Directional Controls */}
+            {!isLoading && (
+                <div className="absolute bottom-12 right-12 z-40 flex flex-col items-center gap-3">
+                    <div className="flex justify-center">
+                        <button
+                            className="w-16 h-16 bg-slate-900/80 backdrop-blur-xl border border-gold-500/30 rounded-2xl flex items-center justify-center text-gold-500 hover:bg-gold-500/20 hover:border-gold-500/60 transition-all active:scale-90 shadow-2xl group"
+                            aria-label="Move Up"
+                        >
+                            <ChevronUp className="w-10 h-10 group-hover:drop-shadow-[0_0_12px_rgba(245,158,11,0.6)] transition-all" />
+                        </button>
+                    </div>
+                    <div className="flex gap-3">
+                        <button
+                            className="w-16 h-16 bg-slate-900/80 backdrop-blur-xl border border-gold-500/30 rounded-2xl flex items-center justify-center text-gold-500 hover:bg-gold-500/20 hover:border-gold-500/60 transition-all active:scale-90 shadow-2xl group"
+                            aria-label="Move Left"
+                        >
+                            <ChevronLeft className="w-10 h-10 group-hover:drop-shadow-[0_0_12px_rgba(245,158,11,0.6)] transition-all" />
+                        </button>
+                        <button
+                            className="w-16 h-16 bg-slate-900/80 backdrop-blur-xl border border-gold-500/30 rounded-2xl flex items-center justify-center text-gold-500 hover:bg-gold-500/20 hover:border-gold-500/60 transition-all active:scale-90 shadow-2xl group"
+                            aria-label="Move Down"
+                        >
+                            <ChevronDown className="w-10 h-10 group-hover:drop-shadow-[0_0_12px_rgba(245,158,11,0.6)] transition-all" />
+                        </button>
+                        <button
+                            className="w-16 h-16 bg-slate-900/80 backdrop-blur-xl border border-gold-500/30 rounded-2xl flex items-center justify-center text-gold-500 hover:bg-gold-500/20 hover:border-gold-500/60 transition-all active:scale-90 shadow-2xl group"
+                            aria-label="Move Right"
+                        >
+                            <ChevronRight className="w-10 h-10 group-hover:drop-shadow-[0_0_12px_rgba(245,158,11,0.6)] transition-all" />
                         </button>
                     </div>
                 </div>
