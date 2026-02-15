@@ -19,7 +19,8 @@ export function VehicleMarker({ position, rotation = 0 }: VehicleMarkerProps) {
                 <div
                     className="relative transition-transform duration-300 ease-out"
                     style={{
-                        filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.5))'
+                        filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.5))',
+                        transform: `rotate(${rotation}deg)`
                     }}
                 >
                     <svg
